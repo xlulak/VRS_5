@@ -47,6 +47,7 @@
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
+uint8_t check_button_state(GPIO_TypeDef* PORT, uint8_t PIN);
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 
@@ -105,6 +106,36 @@ int main(void)
   }
   /* USER CODE END 3 */
 }
+
+uint8_t check_button_state(GPIO_TypeDef* PORT, uint8_t PIN)
+{
+	uint8_t button_state = 0, timeout = 0;
+
+	while(button_state < 20 && timeout < 50)
+	{
+		if(!(PORT->IDR & (1 << PIN))/*LL_GPIO_IsInputPinSet(PORT, PIN)*/)
+		{
+			button_state += 1;
+		}
+		else
+		{
+			button_state = 0;
+		}
+
+		timeout += 1;
+		LL_mDelay(1);
+	}
+
+	if((button_state >= 20) && (timeout <= 50))
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
 
 /**
   * @brief System Clock Configuration
