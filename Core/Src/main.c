@@ -64,76 +64,33 @@ void SystemClock_Config(void);
   */
 int main(void)
 {
-  /* USER CODE BEGIN 1 */
-
-  /* USER CODE END 1 */
-
-  /* MCU Configuration--------------------------------------------------------*/
-
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
 
   LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_SYSCFG);
   LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_PWR);
 
   NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
-
-  /* System interrupt init*/
-
-  /* USER CODE BEGIN Init */
-
-  /* USER CODE END Init */
-
-  /* Configure the system clock */
   SystemClock_Config();
 
-  /* USER CODE BEGIN SysInit */
-
-  /* USER CODE END SysInit */
-
-  /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  /* USER CODE BEGIN 2 */
 
-  /* USER CODE END 2 */
-
-  /* Infinite loop */
+  int akt = 0;
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    /* USER CODE END WHILE */
-
-    /* USER CODE BEGIN 3 */
+	  if(switch_state)
+	  	  {
+		  	  if (akt)
+		  	  {
+		  	  LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_3);
+		  	  akt = 0;
+		  	  }
+		  	  else
+		  	  {
+		  	  LL_GPIO_SetOutputPin(GPIOB,LL_GPIO_PIN_3);
+		  	  akt = 1;
+		  	  }
+	  	  }
   }
-  /* USER CODE END 3 */
-}
-
-uint8_t check_button_state(GPIO_TypeDef* PORT, uint8_t PIN)
-{
-	uint8_t button_state = 0, timeout = 0;
-
-	while(button_state < 20 && timeout < 50)
-	{
-		if(!(PORT->IDR & (1 << PIN))/*LL_GPIO_IsInputPinSet(PORT, PIN)*/)
-		{
-			button_state += 1;
-		}
-		else
-		{
-			button_state = 0;
-		}
-
-		timeout += 1;
-		LL_mDelay(1);
-	}
-
-	if((button_state >= 20) && (timeout <= 50))
-	{
-		return 1;
-	}
-	else
-	{
-		return 0;
-	}
 }
 
 

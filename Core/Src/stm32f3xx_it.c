@@ -200,6 +200,56 @@ void SysTick_Handler(void)
 /**
   * @brief This function handles EXTI line 3 interrupt.
   */
+
+uint8_t checkButtonState(GPIO_TypeDef* PORT, uint8_t PIN, uint8_t edge, uint8_t samples_window, uint8_t samples_required)
+{
+	 /*  Function checks if the button was pressed or EXTI detection was false - positive.
+	 *  @input_param_1 - PORT: GPIO port connected to button.
+	 *  @input_param_2 - PIN: GPIO pin connected to button.
+	 *  @input_param_3 - edge: EXTI trigger edge. Defines what is the input GPIO idle state after the button is pressed.
+	 *  					   TRIGGER_RISE - input is expected to be "1" after EXTI was triggered.
+	 *  					   TRIGGER_FALL - input is expected to be "0" after EXTI was triggered.
+	 *  @input_param_4 - samples_window: How many samples are checked (input port is read) after EXTI is triggered.
+	 *  @input_param_5 - samples_required: How many samples in row are required to be in the idle state. */
+	int pocitadlo = 0;
+
+		for (int i=0;i<samples_window;i++)
+		{
+			if (edge == 1)					//ak je edge == 1 tak vlastne je to FALL hrana, cize pojdeme hladat 0
+			{
+				if (BUTTON_GET_STATE)
+				{
+					pocitadlo++;
+				}
+				else
+				{
+					pocitadlo = 0;
+				}
+				if (pocitadlo == samples_required)
+				{
+					return 1;
+				}
+			}
+
+			else if (edge == 0)				//ak je edge == 0 tak je to RISE hrana, cize pojdeme hladat 1
+			{
+				if (!BUTTON_GET_STATE)
+				{
+					pocitadlo++;
+				}
+				else
+				{
+					pocitadlo = 0;
+				}
+				if (pocitadlo == samples_required)
+				{
+					return 1;
+				}
+			}
+		}
+	return 0;
+}
+
 void EXTI3_IRQHandler(void)
 {
   /* USER CODE BEGIN EXTI3_IRQn 0 */
