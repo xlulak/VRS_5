@@ -47,6 +47,7 @@
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
+
 uint8_t check_button_state(GPIO_TypeDef* PORT, uint8_t PIN);
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
@@ -72,24 +73,23 @@ int main(void)
   SystemClock_Config();
 
   MX_GPIO_Init();
+switch_state = 0;
 
-  int akt = 0;
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  if(switch_state)
-	  	  {
-		  	  if (akt)
-		  	  {
-		  	  LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_3);
-		  	  akt = 0;
-		  	  }
+	  uint32_t help= BUTTON_GET_STATE;
+
+	  	  	  if(switch_state)
+	  	  	  {
+	  	  		  LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_3);
+	  	  	  }
 		  	  else
 		  	  {
-		  	  LL_GPIO_SetOutputPin(GPIOB,LL_GPIO_PIN_3);
-		  	  akt = 1;
+		  		  LL_GPIO_SetOutputPin(GPIOB,LL_GPIO_PIN_3);
+
 		  	  }
-	  	  }
+
   }
 }
 

@@ -70,7 +70,15 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+
+//IDR register
+
+
+
 #define BUTTON_Pin LL_GPIO_PIN_3
+
+
+
 #define BUTTON_GPIO_Port GPIOA
 #define BUTTON_EXTI_IRQn EXTI3_IRQn
 #define LED_Pin LL_GPIO_PIN_3
@@ -86,9 +94,21 @@ void Error_Handler(void);
                                                                  1 bit  for subpriority */
 #define NVIC_PRIORITYGROUP_4         ((uint32_t)0x00000003) /*!< 4 bits for pre-emption priority,
                                                                  0 bit  for subpriority */
+
+#define BUTTON_GET_STATE		LL_GPIO_IsInputPinSet(BUTTON_GPIO_Port,BUTTON_Pin)
+#define		GPIO_PORT_BUTTON				GPIOA
+#define		GPIO_PIN_BUTTON					3
+
+// defines for "checkButtonState"
+#define		TRIGGER_RISE					0
+#define		TRIGGER_FALL					1
+
+#define		BUTTON_EXTI_TRIGGER				TRIGGER_FALL
+#define		BUTTON_EXTI_SAMPLES_WINDOW		30
+#define		BUTTON_EXTI_SAMPLES_REQUIRED	20
 #endif
 /* USER CODE BEGIN Private defines */
-uint8_t switch_state = 0;
+uint8_t switch_state;
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus
