@@ -216,10 +216,10 @@ uint8_t checkButtonState(GPIO_TypeDef* PORT, uint8_t PIN, uint8_t edge, uint8_t 
 		{
 			if (edge == 1)					//ak je edge == 1 tak vlastne je to FALL hrana, cize pojdeme hladat 0
 			{
-				if (!BUTTON_GET_STATE)
+				if (BUTTON_GET_STATE)
 				{
 					pocitadlo++;
-					LL_mDelay(1);
+					LL_mDelay(1);			//funguje brutal dobre
 				}
 				else
 				{
@@ -233,7 +233,7 @@ uint8_t checkButtonState(GPIO_TypeDef* PORT, uint8_t PIN, uint8_t edge, uint8_t 
 
 			else if (edge == 0)				//ak je edge == 0 tak je to RISE hrana, cize pojdeme hladat 1
 			{
-				if (BUTTON_GET_STATE)
+				if (!BUTTON_GET_STATE)
 				{
 					pocitadlo++;
 					LL_mDelay(1);
