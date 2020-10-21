@@ -210,15 +210,16 @@ uint8_t checkButtonState(GPIO_TypeDef* PORT, uint8_t PIN, uint8_t edge, uint8_t 
 	 *  					   TRIGGER_FALL - input is expected to be "0" after EXTI was triggered.
 	 *  @input_param_4 - samples_window: How many samples are checked (input port is read) after EXTI is triggered.
 	 *  @input_param_5 - samples_required: How many samples in row are required to be in the idle state. */
-	int pocitadlo = 0;
+	int pocitadlo = 0, timeout = 0;
 
-		for (int i=0;i<samples_window;i++)
+		while (pocitadlo < samples_required && timeout < samples_window)
 		{
 			if (edge == 1)					//ak je edge == 1 tak vlastne je to FALL hrana, cize pojdeme hladat 0
 			{
 				if (!BUTTON_GET_STATE)
 				{
 					pocitadlo++;
+					LL_mDelay(1);
 				}
 				else
 				{
@@ -235,6 +236,7 @@ uint8_t checkButtonState(GPIO_TypeDef* PORT, uint8_t PIN, uint8_t edge, uint8_t 
 				if (BUTTON_GET_STATE)
 				{
 					pocitadlo++;
+					LL_mDelay(1);
 				}
 				else
 				{
@@ -245,6 +247,7 @@ uint8_t checkButtonState(GPIO_TypeDef* PORT, uint8_t PIN, uint8_t edge, uint8_t 
 					return 1;
 				}
 			}
+			timeout++;
 		}
 	return 0;
 }
