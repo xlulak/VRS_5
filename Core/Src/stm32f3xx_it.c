@@ -200,7 +200,6 @@ void SysTick_Handler(void)
 /**
   * @brief This function handles EXTI line 3 interrupt.
   */
-
 uint8_t checkButtonState(GPIO_TypeDef* PORT, uint8_t PIN, uint8_t edge, uint8_t samples_window, uint8_t samples_required)
 {
 	 /*  Function checks if the button was pressed or EXTI detection was false - positive.
@@ -217,7 +216,7 @@ uint8_t checkButtonState(GPIO_TypeDef* PORT, uint8_t PIN, uint8_t edge, uint8_t 
 		{
 			if (edge == 1)					//ak je edge == 1 tak vlastne je to FALL hrana, cize pojdeme hladat 0
 			{
-				if (BUTTON_GET_STATE)
+				if (!BUTTON_GET_STATE)
 				{
 					pocitadlo++;
 				}
@@ -233,7 +232,7 @@ uint8_t checkButtonState(GPIO_TypeDef* PORT, uint8_t PIN, uint8_t edge, uint8_t 
 
 			else if (edge == 0)				//ak je edge == 0 tak je to RISE hrana, cize pojdeme hladat 1
 			{
-				if (!BUTTON_GET_STATE)
+				if (BUTTON_GET_STATE)
 				{
 					pocitadlo++;
 				}
@@ -249,29 +248,47 @@ uint8_t checkButtonState(GPIO_TypeDef* PORT, uint8_t PIN, uint8_t edge, uint8_t 
 		}
 	return 0;
 }
-
 void EXTI3_IRQHandler(void)
 {
-	/* USER CODE BEGIN EXTI3_IRQn 0 */
-		/*if(checkButtonState(	GPIO_PORT_BUTTON,
+  /* USER CODE BEGIN EXTI3_IRQn 0 */
+		if(checkButtonState(	GPIO_PORT_BUTTON,
 								GPIO_PIN_BUTTON,
 								BUTTON_EXTI_TRIGGER,
 								BUTTON_EXTI_SAMPLES_WINDOW,
 								BUTTON_EXTI_SAMPLES_REQUIRED))
-			{*/
+			{
 				switch_state ^= 1;
-			//}
-	  /* USER CODE END EXTI3_IRQn 0 */
+			}
+  /* USER CODE END EXTI3_IRQn 0 */
   if (LL_EXTI_IsActiveFlag_0_31(LL_EXTI_LINE_3) != RESET)
   {
     LL_EXTI_ClearFlag_0_31(LL_EXTI_LINE_3);
     /* USER CODE BEGIN LL_EXTI_LINE_3 */
-
     /* USER CODE END LL_EXTI_LINE_3 */
   }
   /* USER CODE BEGIN EXTI3_IRQn 1 */
 
   /* USER CODE END EXTI3_IRQn 1 */
+}
+
+/**
+  * @brief This function handles EXTI line 4 interrupt.
+  */
+void EXTI4_IRQHandler(void)
+{
+  /* USER CODE BEGIN EXTI4_IRQn 0 */
+
+  /* USER CODE END EXTI4_IRQn 0 */
+  if (LL_EXTI_IsActiveFlag_0_31(LL_EXTI_LINE_4) != RESET)
+  {
+    LL_EXTI_ClearFlag_0_31(LL_EXTI_LINE_4);
+    /* USER CODE BEGIN LL_EXTI_LINE_4 */
+
+    /* USER CODE END LL_EXTI_LINE_4 */
+  }
+  /* USER CODE BEGIN EXTI4_IRQn 1 */
+
+  /* USER CODE END EXTI4_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */

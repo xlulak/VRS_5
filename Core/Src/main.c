@@ -73,7 +73,7 @@ int main(void)
   SystemClock_Config();
 
   MX_GPIO_Init();
-switch_state = 0;
+  switch_state = 0;
 
   /* USER CODE BEGIN WHILE */
   while (1)
@@ -87,9 +87,7 @@ switch_state = 0;
 		  	  else
 		  	  {
 		  		  LL_GPIO_SetOutputPin(GPIOB,LL_GPIO_PIN_3);
-
 		  	  }
-
   }
 }
 
